@@ -65,7 +65,7 @@ clean-registry:
 		--name $(.REGISTRY_NAME) \
 		--subscription $(.SUBSCRIPTION_ID) \
 		--repository $(.imageName) \
-		--query "[?length(tags) == \`1\`].digest" \
+		--query "[?tags[0] != 'latest'].digest" \
 		-o tsv \
 		| xargs -I% az acr repository delete \
 			--name $(.REGISTRY_NAME) \
