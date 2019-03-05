@@ -60,4 +60,22 @@ task-trigger:
 		--registry $(.REGISTRY_NAME) \
 		--subscription $(.SUBSCRIPTION_ID)
 
-.PHONY: re-tag base-image task task-update task-list task-remove task-trigger
+clean-registry:
+	az acr repository show-manifests \
+		--name $(.REGISTRY_NAME) \
+		--subscription $(.SUBSCRIPTION_ID) \
+		--repository $(.imageName) \
+		--query "[?length(tags) == \`1\`].digest" \
+		-o tsv \
+		| xargs -I% az acr repository delete \
+			--name $(.REGISTRY_NAME) \
+			--subscription $(.SUBSCRIPTION_ID) \
+			--image $(.imageName)@% \
+			--yes
+
+show-logs:
+	az acr task logs \
+		--subscription $(.SUBSCRIPTION_ID) \
+		--name $(.taskName) \
+
+.PHONY: re-tag base-image task task-update task-list task-remove task-trigger clean-registry show-logs
