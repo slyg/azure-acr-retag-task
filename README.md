@@ -63,10 +63,20 @@ $ make task
 
 Verify that you can see your task using the following make commands and other convenient interations:
 
-```sh
-task-list # list tasks
-task-trigger # manually triggers the task (if you want to debug)
-task-trigger show-logs # show the task logs
+```
+Available targets:
+
+app-image                       Create new image with random content in ACR
+clean                           Clean all
+help                            Display help section
+list-tasks                      List tasks in the registry
+re-tag                          Manually re-tag the app image
+repository-clean                Remove non-latest images from the registry
+repository-list                 List the available tags in the repository
+task                            Create a re-tag task
+task-logs                       Logs of the task
+task-remove                     Remove the re-tag task
+task-trigger                    Manually trigger the task
 ```
 
 Now you can create you image using the following command:
