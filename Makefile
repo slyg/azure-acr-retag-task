@@ -58,7 +58,12 @@ task-trigger:
 		--registry $(.REGISTRY_NAME) \
 		--subscription $(.SUBSCRIPTION_ID)
 
-clean-registry:
+task-logs:
+	az acr task logs \
+		--subscription $(.SUBSCRIPTION_ID) \
+		--name $(.taskName)
+
+repository-clean:
 	az acr repository show-manifests \
 		--name $(.REGISTRY_NAME) \
 		--subscription $(.SUBSCRIPTION_ID) \
@@ -71,9 +76,17 @@ clean-registry:
 			--image $(.imageName)@% \
 			--yes
 
-task-logs:
-	az acr task logs \
+repository-list:
+	az acr repository show-tags \
+		--name $(.REGISTRY_NAME) \
+		--repository $(.imageName) \
+		--subscription $(.SUBSCRIPTION_ID)
+
+clean: repository-clean task-remove
+	az acr repository delete \
+		--name $(.REGISTRY_NAME) \
 		--subscription $(.SUBSCRIPTION_ID) \
-		--name $(.taskName)
+		--repository $(.imageName) \
+		--yes
 
 .PHONY: re-tag app-image task task-update task-list task-remove task-trigger clean-registry show-logs
