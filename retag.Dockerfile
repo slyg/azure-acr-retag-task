@@ -1,3 +1,4 @@
 ARG imageName
 ARG registry
-FROM $registry/$imageName:latest
+ARG imageTag=latest
+FROM $registry/$imageName:$imageTag
